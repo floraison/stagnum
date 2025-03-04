@@ -5,7 +5,7 @@ require 'thread'
 
 class Stagnum
 
-  VERSION = '1.0.0'
+  VERSION = '0.9.0'
 
   attr_reader :name
 

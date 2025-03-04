@@ -3,50 +3,54 @@
 require 'thread'
 
 
-class Stagnum
+module Stagnum
 
   VERSION = '0.9.0'
 
-  attr_reader :name
 
-  def initialize(name, worker_count)
+  class Pool
 
-    @name = name
-    @work_queue = ::Thread::Queue.new
-    @worker_count = worker_count
+    attr_reader :name
 
-    @maintenance_mutex = ::Thread::Mutex.new
-    @next_worker_thread_id = -1
-    @worker_threads = []
-  end
+    def initialize(name, worker_count)
 
-  def enqueue(done_queue=Stagnum::DoneQueue.new, data, &block)
+      @name = name
+      @work_queue = ::Thread::Queue.new
+      @worker_count = worker_count
 
-    maintain
+      @maintenance_mutex = ::Thread::Mutex.new
+      @next_worker_thread_id = -1
+      @worker_threads = []
+    end
 
-    done_queue.increment if done_queue.respond_to?(:increment)
+    def enqueue(done_queue=Stagnum::DoneQueue.new, data, &block)
 
-    @work_queue << [ done_queue, data, block ]
+      maintain
 
-    done_queue
-  end
+      done_queue.increment if done_queue.respond_to?(:increment)
 
-  def next_worker_thread_id
+      @work_queue << [ done_queue, data, block ]
 
-    @next_worker_thread_id += 1
-  end
+      done_queue
+    end
 
-  protected
+    def next_worker_thread_id
 
-  def maintain
+      @next_worker_thread_id += 1
+    end
 
-    @maintenance_mutex.synchronize do
+    protected
 
-      @worker_threads = @worker_threads.select { |t| t.alive? }
+    def maintain
 
-      while @worker_threads.size < @worker_count
+      @maintenance_mutex.synchronize do
 
-        @worker_threads << Stagnum::WorkerThread.new(self, @work_queue)
+        @worker_threads = @worker_threads.select { |t| t.alive? }
+
+        while @worker_threads.size < @worker_count
+
+          @worker_threads << Stagnum::WorkerThread.new(self, @work_queue)
+        end
       end
     end
   end
@@ -59,7 +63,7 @@ class Stagnum
 
       super
 
-      @count
+      @count = 0
     end
 
     def increment
@@ -86,7 +90,7 @@ class Stagnum
       @stagnum = stagnum
       @work_queue = work_queue
 
-      self.name = "#{stagnum.name}__#{stagnum.next_thread_id}"
+      self.name = "#{stagnum.name}__#{stagnum.next_worker_thread_id}"
 
       super do
 

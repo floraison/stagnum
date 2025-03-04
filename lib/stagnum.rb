@@ -5,8 +5,7 @@ require 'thread'
 
 module Stagnum
 
-  VERSION = '1.0.0'
-
+  VERSION = '1.0.0'.freeze
 
   class Pool
 

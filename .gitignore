@@ -1,6 +1,8 @@
 
 .ruby-version
 
+.probatio-output.rb
+
 .vim*
 
 .chat.md
@@ -10,4 +12,6 @@
 .deepseek.*
 
 .test-point
+
+Gemfile.lock
 

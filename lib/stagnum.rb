@@ -84,12 +84,12 @@ module Stagnum
 
   class WorkerThread < ::Thread
 
-    def initialize(stagnum, work_queue)
+    def initialize(pool, work_queue)
 
-      @stagnum = stagnum
+      @pool = pool
       @work_queue = work_queue
 
-      self.name = "#{stagnum.name}__#{stagnum.next_worker_thread_id}"
+      self.name = "#{pool.name}__#{pool.next_worker_thread_id}"
 
       super do
 

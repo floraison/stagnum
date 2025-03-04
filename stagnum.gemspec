@@ -21,8 +21,8 @@ A stupid worker pool
   s.metadata = {
     'changelog_uri' => s.homepage + '/blob/master/CHANGELOG.md',
     'bug_tracker_uri' => s.homepage + '/issues',
-    'documentation_uri' => s.homepage,
     'homepage_uri' =>  s.homepage,
+    'documentation_uri' => s.homepage,
     'source_code_uri' => s.homepage,
     #'mailing_list_uri' => 'https://groups.google.com/forum/#!forum/floraison',
     #'wiki_uri' => s.homepage + '/wiki',

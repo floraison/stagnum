@@ -16,7 +16,7 @@ q = Stagnum::DoneQueue.new
 
   pool.enqueue(q, { i: i }) do |d|
 
-    sleep rand * 1
+    sleep(rand)
 
     d[:tname] = Thread.current.name
   end
@@ -63,7 +63,7 @@ end
 30.times do |i|
 
   pool.enqueue(q, { i: i }) do |d|
-    sleep rand * 1
+    sleep(rand)
     d[:tname] = Thread.current.name
   end
 end

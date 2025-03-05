@@ -12,10 +12,10 @@ Gem::Specification.new do |s|
   s.email = [ 'jmettraux+flor@gmail.com' ]
   s.homepage = 'https://github.com/floraison/stagnum'
   s.license = 'MIT'
-  s.summary = 'a worker pool'
+  s.summary = 'a work thread pool'
 
   s.description = %{
-A stupid worker pool
+A stupid work thread pool
   }.strip
 
   s.metadata = {

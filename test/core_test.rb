@@ -69,5 +69,30 @@ group Stagnum do
     assert s[0][0], :success
     assert_match s[0][1][:tname], /^pool-zero__\d$/
   end
+
+  test 'when errors' do
+
+    pool = Stagnum::Pool.new('pool-zero', 4)
+
+    s, f = [], []
+
+    q = Stagnum::DoneQueue.new
+
+    10.times do |i|
+
+      pool.enqueue(q, { i: i }) do |d|
+
+        fail 'no bueno'
+      end
+    end
+
+    sa, fa = q.pop_all
+
+    assert_size sa, 0
+    assert_size fa, 10
+
+    assert_is_a fa[0][2], RuntimeError
+    assert fa[0][2].message, 'no bueno'
+  end
 end
 

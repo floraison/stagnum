@@ -45,6 +45,32 @@ pp successes
 
 One can use `Thread::Queue` instead of `Stagnum::DoneQueue`
 
+`Stagnum::DoneQueue` also has `#on_success` and `#on_failure` methods:
+
+```ruby
+pool = Stagnum::Pool.new('pool-zero', 4)
+
+s, f = [], []
+
+q = Stagnum::DoneQueue.new
+q.on_success do |r|
+  s << r
+end
+q.on_failure do |r|
+  f << r
+end
+
+30.times do |i|
+
+  pool.enqueue(q, { i: i }) do |d|
+    sleep rand * 1
+    d[:tname] = Thread.current.name
+  end
+end
+
+q.pop_all
+```
+
 ## LICENSE
 
 MIT, see [LICENSE.txt](LICENSE.txt)

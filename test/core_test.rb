@@ -18,7 +18,7 @@ group Stagnum do
 
       pool.enqueue(q, { i: i }) do |d|
 
-        sleep rand * 1
+        sleep(rand)
 
         d[:tname] = Thread.current.name
       end
@@ -55,7 +55,7 @@ group Stagnum do
 
       pool.enqueue(q, { i: i }) do |d|
 
-        sleep rand * 1
+        sleep(rand)
 
         d[:tname] = Thread.current.name
       end

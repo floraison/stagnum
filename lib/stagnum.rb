@@ -56,14 +56,13 @@ module Stagnum
 
   class DoneQueue < ::Thread::Queue
 
-    attr_reader :count
+    attr_reader :listeners, :count
 
     def initialize(items=[])
 
       super
 
       @listeners = []
-
       @count = 0
     end
 
@@ -87,25 +86,17 @@ module Stagnum
 
       r = super
 
-      @listeners.each { |l| l[1].call(r) if l[0] == :any || l[0] == r[0] }
+      @listeners.each do |l|
+        l0 = l[0]
+        l[1].call(r) if l0 == :any || l0 == r[0]
+      end if r.is_a?(Array)
 
       r
     end
 
-    def on_success(&block)
-
-      @listeners << [ :success, block ]
-    end
-
-    def on_failure(&block)
-
-      @listeners << [ :failure, block ]
-    end
-
-    def on_pop(&block)
-
-      @listeners << [ :any, block ]
-    end
+    def on_success(&block); @listeners << [ :success, block ]; end
+    def on_failure(&block); @listeners << [ :failure, block ]; end
+    def on_pop(&block); @listeners << [ :any, block ]; end
   end
 
   class WorkerThread < ::Thread

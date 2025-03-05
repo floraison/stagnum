@@ -62,6 +62,8 @@ module Stagnum
 
       super
 
+      @listeners = []
+
       @count = 0
     end
 
@@ -76,9 +78,33 @@ module Stagnum
 
       @count.times
         .inject([ [], [] ]) { |a, i|
-          r = self.pop
+          r = pop
           a[r[0] == :success ? 0 : 1] << r
           a }
+    end
+
+    def pop(non_blocking=false)
+
+      r = super
+
+      @listeners.each { |l| l[1].call(r) if l[0] == :any || l[0] == r[0] }
+
+      r
+    end
+
+    def on_success(&block)
+
+      @listeners << [ :success, block ]
+    end
+
+    def on_failure(&block)
+
+      @listeners << [ :failure, block ]
+    end
+
+    def on_pop(&block)
+
+      @listeners << [ :any, block ]
     end
   end
 

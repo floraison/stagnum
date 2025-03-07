@@ -43,9 +43,9 @@ pp successes
   #  [:success, {i: 8, tname: "pool-zero__2"}]]
 ```
 
-One can use `Thread::Queue` instead of `Stagnum::DoneQueue`
+One can use `Thread::Queue` instead of `Stagnum::DoneQueue`, but `DoneQueue` provides a `#pop_all`.
 
-`Stagnum::DoneQueue` also has `#on_success` and `#on_failure` methods:
+`Stagnum::DoneQueue` also has `#on_success` and `#on_failure` (and `#on_pop` methods:
 
 ```ruby
 pool = Stagnum::Pool.new('pool-zero', 4)
@@ -69,6 +69,8 @@ end
 end
 
 q.pop_all
+
+# ...
 ```
 
 ## LICENSE
